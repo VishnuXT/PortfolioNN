@@ -130,10 +130,22 @@
         </div>
         <div class="container portfolio-grid">
           <article class="portfolio-card portfolio-large"><span>Featured Revit Projects</span><h3>Coordinated BIM Models</h3><p>High-impact Revit projects with integrated MEP systems for delivery-ready construction.</p></article>
-          <article class="portfolio-card portfolio-medium"><span>HVAC Drawings</span><h3>Mechanical Layouts</h3></article>
-          <article class="portfolio-card portfolio-medium"><span>Plumbing Layouts</span><h3>Water & Drainage Systems</h3></article>
-          <article class="portfolio-card portfolio-small"><span>Clash Detection</span><h3>Navisworks Reports</h3></article>
-          <article class="portfolio-card portfolio-small"><span>Shop Drawings</span><h3>Fabrication Ready</h3></article>
+          <a class="portfolio-card portfolio-medium" href="Revit/HVAC.pdf" target="_blank" rel="noopener">
+            <span>HVAC Drawings</span>
+            <h3>Mechanical Layouts</h3>
+          </a>
+          <a class="portfolio-card portfolio-medium" href="Revit/PLUMBING.pdf" target="_blank" rel="noopener">
+            <span>Plumbing Layouts</span>
+            <h3>Water & Drainage Systems</h3>
+          </a>
+          <a class="portfolio-card portfolio-small" href="Revit/FIRE.pdf" target="_blank" rel="noopener">
+            <span>Fire Protection</span>
+            <h3>Firefighting Systems</h3>
+          </a>
+          <a class="portfolio-card portfolio-small" href="Revit/ELECTRIC.pdf" target="_blank" rel="noopener">
+            <span>Electrical</span>
+            <h3>Power & Distribution</h3>
+          </a>
           <article class="portfolio-card portfolio-small"><span>BOQ Documentation</span><h3>Quantity Accuracy</h3></article>
         </div>
       </section>
@@ -240,8 +252,76 @@
         const isOpen = nav.classList.toggle('open');
         navToggle.classList.toggle('open', isOpen);
         navToggle.setAttribute('aria-expanded', String(isOpen));
+        handleBackdrop(isOpen);
       });
     }
+
+    // Ensure correct nav state on resize (prevent CSS breakpoint conflicts)
+    const MOBILE_BP = 880;
+    function syncNavOnResize() {
+      if (!nav || !navToggle) return;
+      if (window.innerWidth > MOBILE_BP) {
+        // desktop: hide hamburger, ensure nav closed
+        nav.classList.remove('open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.style.display = 'none';
+        nav.style.display = '';
+      } else {
+        // mobile/tablet: show hamburger and let CSS control nav visibility
+        navToggle.style.display = 'inline-grid';
+        // if nav isn't open, ensure it's hidden (CSS handles this)
+        if (!nav.classList.contains('open')) nav.style.display = '';
+      }
+    }
+    window.addEventListener('resize', syncNavOnResize);
+    window.addEventListener('load', syncNavOnResize);
+
+    // Backdrop management for tablet menu
+    let backdropEl = null;
+    function createBackdrop() {
+      if (backdropEl) return backdropEl;
+      backdropEl = document.createElement('div');
+      backdropEl.className = 'nav-backdrop';
+      backdropEl.addEventListener('click', () => {
+        // close menu when backdrop clicked
+        if (nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          navToggle.classList.remove('open');
+          navToggle.setAttribute('aria-expanded', 'false');
+          hideBackdrop();
+        }
+      });
+      document.body.appendChild(backdropEl);
+      // force reflow then show
+      requestAnimationFrame(() => backdropEl.classList.add('show'));
+      return backdropEl;
+    }
+
+    function hideBackdrop() {
+      if (!backdropEl) return;
+      backdropEl.classList.remove('show');
+      setTimeout(() => {
+        if (backdropEl && backdropEl.parentNode) backdropEl.parentNode.removeChild(backdropEl);
+        backdropEl = null;
+      }, 260);
+    }
+
+    function handleBackdrop(isOpen) {
+      const w = window.innerWidth;
+      // show backdrop for mobile + tablet when the nav (hamburger) is open
+      if (isOpen && w <= MOBILE_BP) {
+        createBackdrop();
+      } else {
+        hideBackdrop();
+      }
+    }
+
+    // ensure backdrop removed on resize
+    window.addEventListener('resize', () => {
+      if (!nav.classList.contains('open')) hideBackdrop();
+      else handleBackdrop(true);
+    });
 
     const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
