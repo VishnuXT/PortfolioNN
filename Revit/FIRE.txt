@@ -1,0 +1,13 @@
+Fire Protection SYSYTEM
+
+Fire Protection Wet Riser / Sprinkler Piping Layout
+
+HVAC Duct Layout Design – Project Description
+
+Fire Protection Water Distribution Network
+-This drawing shows the wet fire protection piping system designed to distribute water throughout the building.
+
+Main and Branch Pipe Routing
+
+-The layout consists of a central main pipe with multiple branch connections serving different rooms and zones. Pipe sizes such as 65 mm, 50 mm, and 32 mm are indicated to maintain the required flow and pressure throughout the system.
+
