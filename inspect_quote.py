@@ -1,0 +1,11 @@
+from pathlib import Path
+text = Path('preloader_check.js').read_text(encoding='utf-8')
+idx = text.find("heroBg.style.backgroundImage")
+print('index', idx)
+print(text[idx:idx+600])
+print('---')
+start = text.find('"', idx)
+end = text.find('"', start+1)
+print('start', start, 'end', end)
+print(text[start-30:end+30])
+print('end snippet:', repr(text[end-10:end+10]))
