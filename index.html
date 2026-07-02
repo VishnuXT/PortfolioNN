@@ -276,11 +276,11 @@
     </div>
     <div class="contact-form reveal">
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" placeholder="Your name"></div>
-        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="your@email.com"></div>
+        <div class="form-group"><label class="form-label">Name</label><input type="text" id="contactName" class="form-input" placeholder="Your name"></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" id="contactPhone" class="form-input" placeholder="Your phone number"></div>
       </div>
-      <div class="form-group"><label class="form-label">Subject</label><input type="text" class="form-input" placeholder="Project inquiry..."></div>
-      <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" placeholder="Tell me about your project..."></textarea></div>
+      <div class="form-group"><label class="form-label">Subject</label><input type="text" id="contactSubject" class="form-input" placeholder="Project inquiry..."></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea id="contactMessage" class="form-input" placeholder="Tell me about your project..."></textarea></div>
       <button class="btn-submit" onclick="handleSubmit()">Send Message →</button>
     </div>
   </div>
@@ -383,10 +383,31 @@ function filterProjects(cat, btn) {
 
 // Contact submit
 function handleSubmit() {
-  const btn = document.querySelector('.btn-submit');
-  btn.textContent = 'Message Sent ✓';
-  btn.style.background = '#1a8a4a';
-  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+  const name = document.getElementById('contactName').value.trim();
+  const phone = document.getElementById('contactPhone').value.trim();
+  const subject = document.getElementById('contactSubject').value.trim();
+  const message = document.getElementById('contactMessage').value.trim();
+  const submitBtn = document.querySelector('.btn-submit');
+
+  if (!name || !phone || !subject || !message) {
+    submitBtn.textContent = 'Please fill all fields';
+    submitBtn.style.background = '#b45309';
+    setTimeout(() => { submitBtn.textContent = 'Send Message ->'; submitBtn.style.background = ''; }, 2500);
+    return;
+  }
+
+  const whatsappMessage = [
+    'New portfolio inquiry',
+    `Name: ${name}`,
+    `Phone: ${phone}`,
+    `Subject: ${subject}`,
+    `Message: ${message}`
+  ].join('\n');
+
+  submitBtn.textContent = 'Opening WhatsApp...';
+  submitBtn.style.background = '#1a8a4a';
+  window.location.href = `https://wa.me/918590795771?text=${encodeURIComponent(whatsappMessage)}`;
+  setTimeout(() => { submitBtn.textContent = 'Send Message ->'; submitBtn.style.background = ''; }, 3000);
 }
 
 // Particles
